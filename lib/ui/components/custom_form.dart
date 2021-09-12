@@ -18,12 +18,24 @@ class CustomForm extends StatefulWidget {
 class _CustomFormState extends State<CustomForm> {
 
   var items = ['Working a lot harder', 'Being a lot smarter', 'Being a self-starter', 'Placed in charge of trading charter'];
-
-
   bool isFilled = true;
+
+  autoSuggest(String value){
+    items = items.map((item)=>item.toUpperCase()).toList();
+    print(value);
+
+    for (int i = 0; i < items.length; i++) {
+      String data = items[i];
+      if (data.toLowerCase().contains(value.toLowerCase())) {
+        print('sonuc $data');
+      } else {
+        // print('tum liste $data');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
@@ -41,78 +53,63 @@ class _CustomFormState extends State<CustomForm> {
           ),
           child: Column(
             children: [
-              new Padding(
+              Padding(
                 padding: const EdgeInsets.all(24.0),
-                child: GestureDetector(
-                  onTap: (){
-                    print('tikladiniz');
-                    setState(() {
-                      isFilled = false;
-                    });
-                  },
-                  child: new Row(
-                    children: <Widget>[
-                      Expanded(
-                        child:
-                        isFilled ?
-                        Autocomplete<String>(
-                          optionsBuilder: (TextEditingValue textEditingValue) {
-                            // return onSelectedController(textEditingValue.text);
-                            items = items.map((item)=>item.toUpperCase()).toList();
+                child: new Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Autocomplete<String>(
+                        optionsBuilder: (TextEditingValue textEditingValue) {
+                          // return onSelectedController(textEditingValue.text);
+                          items = items.map((item)=>item.toUpperCase()).toList();
 
 
-                            if (textEditingValue.text == '') {
-                              return const Iterable<String>.empty();
-                            }
-                            return items.where((String option) {
-                              return option
-                                  .contains(textEditingValue.text.toUpperCase());
-                            });
-                          },
-                          onSelected: (test) {
-                          },
-                        )
-                            :
-                        Autocomplete<String>(
-                          optionsBuilder: (TextEditingValue textEditingValue) {
-                            // return onSelectedController(textEditingValue.text);
-                            items = items.map((item)=>item.toUpperCase()).toList();
+                          return items.where((String option) {
+                            return option
+                                .contains(textEditingValue.text.toUpperCase());
+                          });
+                        },
+                        onSelected: (test) {
+                        },
+                      )
 
-
-                            return items.where((String option) {
-                              return option
-                                  .contains(textEditingValue.text.toUpperCase());
-                            });
-                          },
-                          onSelected: (test) {
-                          },
-                        )
-
-                      ),
-                      Icon(Icons.arrow_drop_down),
-                      // new PopupMenuButton<String>(
-                      //   icon: const Icon(Icons.arrow_drop_down),
-                      //   onSelected: (String value) {
-                      //     setState(() {
-                      //
-                      //       deneme = value;
-                      //       onSelectedController(deneme!);
-                      //       showAutoComplete = true;
-                      //
-                      //     });
-                      //
-                      //   },
-                      //   itemBuilder: (BuildContext context) {
-                      //     return items.map<PopupMenuItem<String>>((String value) {
-                      //       return new PopupMenuItem(child: new Text(value), value: value);
-                      //     }).toList();
-                      //   },
-                      // ),
-                    ],
-                  ),
+                    ),
+                    Icon(Icons.arrow_drop_down),
+                  ],
                 ),
               ),
-              // customTextField(),
+              Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        onTap: (){
+                          // String test = '';
+                          // autoSuggest(test);
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            autoSuggest(value);
+
+                          });
+
+                        },
+
+                      ),
+                    ),
+                    IconButton(onPressed: (){
+                      String value = '';
+                      autoSuggest(value);
+                    }, icon: Icon(Icons.arrow_drop_down))
+
+
+
+                      // (Icons.arrow_drop_down)),
+
+                  ],
+                ),
+              ),
             ],
           ),
         ),
